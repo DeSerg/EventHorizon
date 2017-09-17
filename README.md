@@ -1,3 +1,3 @@
 # EventHorizon
 
-An iOS space simulator.
+iOS space simulator.
