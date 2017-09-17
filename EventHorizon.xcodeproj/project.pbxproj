@@ -16,6 +16,7 @@
 		D4579B3D1F6EE35D009357C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4579B3C1F6EE35D009357C8 /* Assets.xcassets */; };
 		D4579B401F6EE35D009357C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4579B3E1F6EE35D009357C8 /* LaunchScreen.storyboard */; };
 		D4579B4B1F6EE35D009357C8 /* EventHorizonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4579B4A1F6EE35D009357C8 /* EventHorizonTests.swift */; };
+		D4579B581F6EE562009357C8 /* SceneLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4579B571F6EE562009357C8 /* SceneLogic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		D4579B461F6EE35D009357C8 /* EventHorizonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventHorizonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4579B4A1F6EE35D009357C8 /* EventHorizonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHorizonTests.swift; sourceTree = "<group>"; };
 		D4579B4C1F6EE35D009357C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4579B571F6EE562009357C8 /* SceneLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 		D4579B2E1F6EE35D009357C8 /* EventHorizon */ = {
 			isa = PBXGroup;
 			children = (
+				D4579B561F6EE510009357C8 /* GameLogic */,
 				D4579B2F1F6EE35D009357C8 /* AppDelegate.swift */,
 				D4579B311F6EE35D009357C8 /* GameScene.sks */,
 				D4579B331F6EE35D009357C8 /* Actions.sks */,
@@ -103,6 +106,14 @@
 				D4579B4C1F6EE35D009357C8 /* Info.plist */,
 			);
 			path = EventHorizonTests;
+			sourceTree = "<group>";
+		};
+		D4579B561F6EE510009357C8 /* GameLogic */ = {
+			isa = PBXGroup;
+			children = (
+				D4579B571F6EE562009357C8 /* SceneLogic.swift */,
+			);
+			name = GameLogic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +226,7 @@
 				D4579B361F6EE35D009357C8 /* GameScene.swift in Sources */,
 				D4579B381F6EE35D009357C8 /* GameViewController.swift in Sources */,
 				D4579B301F6EE35D009357C8 /* AppDelegate.swift in Sources */,
+				D4579B581F6EE562009357C8 /* SceneLogic.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
