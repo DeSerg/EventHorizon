@@ -19,7 +19,7 @@ class Weapon {
     var damage: Int
     var rechargeTime: Double
     
-    init(weaponCategory: WeaponCategory, damage: Int, rechargeTime: Double) {
+    init(_ weaponCategory: WeaponCategory, _ damage: Int, _ rechargeTime: Double) {
         self.weaponCategory = weaponCategory
         self.damage = damage
         self.rechargeTime = rechargeTime
@@ -30,20 +30,22 @@ class Weapon {
 
 class Blaster: Weapon {
     
-    init(weaponCategory: WeaponCategory, damage: Int, rechargeTime: Double, laserWidth: Double) {
-        super.init(weaponCategory: weaponCategory, damage: damage, rechargeTime: rechargeTime)
+    override init(_ weaponCategory: WeaponCategory, _ damage: Int, _ rechargeTime: Double) {
+        super.init(weaponCategory, damage, rechargeTime)
     }
 }
 
 class Laser: Weapon {
     var laserWidth: Double
     
-    init(weaponCategory: WeaponCategory, damage: Int, rechargeTime: Double, laserWidth: Double) {
+    init(_ weaponCategory: WeaponCategory, _ damage: Int, _ rechargeTime: Double, _ laserWidth: Double = 0) {
         self.laserWidth = laserWidth
-        super.init(weaponCategory: weaponCategory, damage: damage, rechargeTime: rechargeTime)
+        super.init(weaponCategory, damage, rechargeTime)
     }
 }
 
 class MachineGun: Weapon {
-    
+    override init(_ weaponCategory: WeaponCategory, _ damage: Int, _ rechargeTime: Double) {
+        super.init(weaponCategory, damage, rechargeTime)
+    }
 }
