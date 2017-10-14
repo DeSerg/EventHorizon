@@ -15,6 +15,7 @@ class EventHorizon {
     private let DefaultDistanceCoeff = CGFloat(4)
     private let screenRect: CGRect
     private let distortionDegree: CGFloat = 2
+    private let minSpeed: CGFloat = 5
     private let ln1000: CGFloat = log2(1000.0)
     
     private var distanceCoeff: CGFloat
@@ -96,11 +97,14 @@ class EventHorizon {
 //        }
 
         distortionNormFunct = { (x) in
-            return 1 - cos(asin(x/width))
+            return 1 - cos(asin(0.95 * x / width))
         }
 
+        let widthSquare = width * width
+        
         distortionNormDerivative = { (x) in
-            return 1 / width
+            let temp = sqrt(1 - 0.9025 * x * x / (widthSquare))
+            return 0.9025 * x / (widthSquare * temp)
         }
 
         distortionFunct = { (x) in
@@ -127,7 +131,7 @@ class EventHorizon {
     
     func nextXCoordFor(xCoord: CGFloat, speed: CGFloat, dt: TimeInterval) -> CGFloat {
         let derivative = Float(distortionDerivative(xCoord))
-        let vx = speed * CGFloat( cos(atan(pow(derivative, 4))) )
+        let vx = max(minSpeed, speed * CGFloat( cos(atan(pow(derivative, 4))) ))
         let nextXCoord = xCoord - vx * CGFloat(dt)
         return nextXCoord
     }
