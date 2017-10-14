@@ -20,6 +20,10 @@
 		D4579B9A1F6F0340009357C8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4579B991F6F0340009357C8 /* Game.swift */; };
 		D4579B9D1F6F0480009357C8 /* Weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4579B9C1F6F0480009357C8 /* Weapon.swift */; };
 		D4579BC51F714B61009357C8 /* WeaponFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4579BC41F714B61009357C8 /* WeaponFactory.swift */; };
+		D4FC875D1F83B2AA00DDD6EE /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FC875C1F83B2AA00DDD6EE /* Ship.swift */; };
+		D4FC875F1F83B6C200DDD6EE /* ShipBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FC875E1F83B6C200DDD6EE /* ShipBuilder.swift */; };
+		D4FCADE61F863A0300526B33 /* EventHorizon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FCADE51F863A0300526B33 /* EventHorizon.swift */; };
+		D4FCADE81F864C2700526B33 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FCADE71F864C2700526B33 /* MyUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +54,10 @@
 		D4579B991F6F0340009357C8 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		D4579B9C1F6F0480009357C8 /* Weapon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weapon.swift; sourceTree = "<group>"; };
 		D4579BC41F714B61009357C8 /* WeaponFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeaponFactory.swift; sourceTree = "<group>"; };
+		D4FC875C1F83B2AA00DDD6EE /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
+		D4FC875E1F83B6C200DDD6EE /* ShipBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipBuilder.swift; sourceTree = "<group>"; };
+		D4FCADE51F863A0300526B33 /* EventHorizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHorizon.swift; sourceTree = "<group>"; };
+		D4FCADE71F864C2700526B33 /* MyUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +102,11 @@
 				D4579B2F1F6EE35D009357C8 /* AppDelegate.swift */,
 				D4579B351F6EE35D009357C8 /* GameScene.swift */,
 				D4579B371F6EE35D009357C8 /* GameViewController.swift */,
+				D4FCADE51F863A0300526B33 /* EventHorizon.swift */,
+				D4FCADE71F864C2700526B33 /* MyUtils.swift */,
 				D4579B561F6EE510009357C8 /* SceneLogic */,
 				D4579B9B1F6F044B009357C8 /* Weapons */,
+				D4FC875B1F83B27F00DDD6EE /* Ships */,
 				D4579B391F6EE35D009357C8 /* Main.storyboard */,
 				D4579B3E1F6EE35D009357C8 /* LaunchScreen.storyboard */,
 				D4579B931F6F01AC009357C8 /* Assets.xcassets */,
@@ -131,6 +142,15 @@
 				D4579BC41F714B61009357C8 /* WeaponFactory.swift */,
 			);
 			name = Weapons;
+			sourceTree = "<group>";
+		};
+		D4FC875B1F83B27F00DDD6EE /* Ships */ = {
+			isa = PBXGroup;
+			children = (
+				D4FC875C1F83B2AA00DDD6EE /* Ship.swift */,
+				D4FC875E1F83B6C200DDD6EE /* ShipBuilder.swift */,
+			);
+			name = Ships;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,17 +198,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = deserg;
 				TargetAttributes = {
 					D4579B2B1F6EE35D009357C8 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = C97S8YETBG;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					D4579B451F6EE35D009357C8 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = C97S8YETBG;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						TestTargetID = D4579B2B1F6EE35D009357C8;
 					};
@@ -245,8 +267,12 @@
 				D4579B9A1F6F0340009357C8 /* Game.swift in Sources */,
 				D4579B361F6EE35D009357C8 /* GameScene.swift in Sources */,
 				D4579B381F6EE35D009357C8 /* GameViewController.swift in Sources */,
+				D4FC875F1F83B6C200DDD6EE /* ShipBuilder.swift in Sources */,
+				D4FCADE61F863A0300526B33 /* EventHorizon.swift in Sources */,
+				D4FCADE81F864C2700526B33 /* MyUtils.swift in Sources */,
 				D4579B301F6EE35D009357C8 /* AppDelegate.swift in Sources */,
 				D4579B581F6EE562009357C8 /* SceneLogic.swift in Sources */,
+				D4FC875D1F83B2AA00DDD6EE /* Ship.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,7 +324,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -306,7 +334,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -349,7 +381,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -357,7 +391,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -393,7 +431,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ru.deserg.EventHorizon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -407,7 +446,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ru.deserg.EventHorizon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -421,7 +461,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ru.deserg.EventHorizonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EventHorizon.app/EventHorizon";
 			};
 			name = Debug;
@@ -436,7 +477,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ru.deserg.EventHorizonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EventHorizon.app/EventHorizon";
 			};
 			name = Release;

@@ -8,103 +8,191 @@
 
 import SpriteKit
 import GameplayKit
+import CoreMotion
 
 class GameScene: SKScene {
     
-    var entities = [GKEntity]()
-    var graphs = [String : GKGraph]()
+    let shipSpeed: CGFloat = 300
+    let starSize: CGFloat = 20
     
-    private var lastUpdateTime : TimeInterval = 0
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    var lastUpdateTime: TimeInterval = 0
+    var dt: TimeInterval = 0
+    
+    var playableRect: CGRect
+    var eventHorizon: EventHorizon
+    
+    var spacecraft: Ship
+    
+    var motionManager = CMMotionManager()
+    var destY: CGFloat = 50
+    
+    func spawnStar(coef: CGFloat = 1, inOrigin: Bool = true) {
+        
+        let star = SKSpriteNode(imageNamed: "star")
+        star.name = "star"
+        star.size = CGSize(width: starSize * coef, height: starSize * coef)
+//        star.zRotation = CGFloat.random(min: 0, max: CGFloat(Double.pi))
+        if inOrigin {
+            star.position.x = playableRect.width + star.size.width / 2
+            let starMinY = playableRect.minY - star.size.height / 2
+            let starMaxY = playableRect.maxY + star.size.height / 2
+            star.position.y = CGFloat.random(min: starMinY, max: starMaxY)
+        } else {
+            star.position = eventHorizon.randomPoint()
+        }
+        let starScale = eventHorizon.scaleFor(xCoord: star.position.x)
+        star.setScale(starScale)
+        addChild(star)
+    }
+    
+    func updateDt(_ currentTime: TimeInterval) {
+        if (lastUpdateTime == 0) {
+            lastUpdateTime = currentTime
+        }
+        
+        dt = currentTime - self.lastUpdateTime
+        lastUpdateTime = currentTime
+    }
+    
+    override init(size: CGSize) {
+        let maxAspectRatio:CGFloat = 16.0/9.0 // 1
+        let playableHeight = size.width / maxAspectRatio // 2
+        let playableMargin = (size.height-playableHeight)/2.0 // 3
+        playableRect = CGRect(x: 0, y: playableMargin,
+                              width: size.width,
+                              height: playableHeight)
+        
+        print(playableRect.origin)
+        print(playableRect.size)
+        
+        eventHorizon = EventHorizon(screenRect: playableRect, distanceCoeff: 1, scaleCoeff: 3)
+        
+        spacecraft = Ship()
+        spacecraft.position.x = playableRect.minX + spacecraft.size.width / 2
+        spacecraft.position.y = playableRect.minY + playableRect.size.height / 2
+        spacecraft.zPosition = 50
+        
+        destY = spacecraft.position.y
+        
+        super.init(size: size)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func didMove(to view: SKView) {
+        
+        anchorPoint = CGPoint(x: 0, y: 0)
+        
+        backgroundColor = SKColor.black
+        
+        addChild(spacecraft)
+        
+        for _ in (0...200) {
+            spawnStar(inOrigin: false)
+        }
+        
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run {
+            self.spawnStar()
+        }, SKAction.wait(forDuration: 0.02)])))
+        
+//        run(SKAction.repeatForever(SKAction.sequence([SKAction.run {
+//            self.spawnStar(coef: 10)
+//            }, SKAction.wait(forDuration: 1)])))
+//        if motionManager.isAccelerometerAvailable == true {
+//            print("AVAILIABALE!")
+//            // 2
+//            motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler:{
+//                data, error in
+//
+//                let currentY = self.spacecraft.position.y
+//
+//                guard let d = data else {
+//                    return
+//                }
+//
+//                // 3
+//                print()
+//                print("x: \(d.acceleration.x)")
+////                print("y: \(d.acceleration.y)")
+////                print("z: \(d.acceleration.z)")
+//                let accVal = d.acceleration.x
+//                let coef: Double = 1000
+//                let border = 0.5
+//                self.destY = currentY - CGFloat((accVal - border) * coef)
+//            })
+//
+//        }
+    }
     
     override func sceneDidLoad() {
-
-        self.lastUpdateTime = 0
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
+    }
+    
+    
+    // touching logics
+    func sceneTouched(touchLocation:CGPoint) {
+        destY = touchLocation.y
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>,
+                               with event: UIEvent?) {
+        guard let touch = touches.first else {
+            return
         }
+        let touchLocation = touch.location(in: self)
+        sceneTouched(touchLocation: touchLocation)
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>,
+                               with event: UIEvent?) {
+        guard let touch = touches.first else {
+            return
+        }
+        let touchLocation = touch.location(in: self)
+        sceneTouched(touchLocation: touchLocation)
+    }
+    
+    func checkBordersSpacecraft() {
+        let pos = spacecraft.position
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+        if pos.x < playableRect.minX {
+            spacecraft.position.x = playableRect.minX
+        } else if pos.x > playableRect.maxX {
+            spacecraft.position.x = playableRect.maxX
         }
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        if pos.y < playableRect.minY {
+            spacecraft.position.y = playableRect.minY
+        } else if pos.y > playableRect.maxY {
+            spacecraft.position.y = playableRect.maxY
+        }
+        
     }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        updateDt(currentTime)
         
-        // Initialize _lastUpdateTime if it has not already been
-        if (self.lastUpdateTime == 0) {
-            self.lastUpdateTime = currentTime
+        enumerateChildNodes(withName: "star") {  node, _ in
+            guard let node = node as? SKSpriteNode else {
+                return
+            }
+            
+            if node.position.x < self.playableRect.minX {
+                node.removeFromParent()
+            }
+            node.position.x = self.eventHorizon.nextXCoordFor(xCoord: node.position.x, speed: self.shipSpeed, dt: self.dt)
+            let scale = self.eventHorizon.scaleFor(xCoord: node.position.x)
+            node.xScale = scale * self.eventHorizon.xScaleFor(xCoord: node.position.x)
+            node.yScale = scale
+//            node.zRotation += 0.01
         }
         
-        // Calculate time since last update
-        let dt = currentTime - self.lastUpdateTime
-        
-        // Update entities
-        for entity in self.entities {
-            entity.update(deltaTime: dt)
-        }
-        
-        self.lastUpdateTime = currentTime
+//        spacecraft.
+        spacecraft.run(SKAction.moveTo(y: destY, duration: 1))
+//        spacecraft.position.y = destY
+        checkBordersSpacecraft()
+
     }
 }
