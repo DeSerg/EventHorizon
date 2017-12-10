@@ -16,16 +16,27 @@ class GameScene: SKScene {
     let starSize: CGFloat = 20
     let asteroidSize: CGFloat = 350
     
+    
     var lastUpdateTime: TimeInterval = 0
     var dt: TimeInterval = 0
+    
     
     var playableRect: CGRect
     var eventHorizon: EventHorizon
     
+    let SpacecraftMoveRectPercentage: CGFloat = 0.2
+    let SpacecraftShootRectPercentage: CGFloat = 0.75
+    let TopMenuRectPercentage: CGFloat = 0.05
+    
+    var spacecraftMoveRect: CGRect
+    var spacecraftShootRect: CGRect
+    var topMenuRect: CGRect
+    
+    
     var spacecraft: Ship
     
     var motionManager = CMMotionManager()
-    var destY: CGFloat = 50
+    
     
     func spawnStar(coef: CGFloat = 1, inOrigin: Bool = true) {
         
@@ -85,18 +96,36 @@ class GameScene: SKScene {
                               width: size.width,
                               height: playableHeight)
         
+        spacecraftMoveRect = CGRect(x: 0, y: playableMargin,
+                                    width: size.width * SpacecraftMoveRectPercentage,
+                                    height: playableHeight)
+        
+        spacecraftShootRect = CGRect(x: spacecraftMoveRect.width, y: playableMargin,
+                                    width: size.width * SpacecraftShootRectPercentage,
+                                    height: playableHeight)
+        
+        topMenuRect = CGRect(x: spacecraftMoveRect.width + spacecraftShootRect.width, y: playableMargin,
+                                     width: size.width * TopMenuRectPercentage,
+                                     height: playableHeight)
+        
+        
+        
         print(playableRect.origin)
         print(playableRect.size)
         
         eventHorizon = EventHorizon(screenRect: playableRect, distanceCoeff: 1, scaleCoeff: 50)
         
-        spacecraft = Ship()
+        let shipDirector = ShipDirector()
+        spacecraft = shipDirector.construct(builder: FastShipBuilder())
+
         spacecraft.position.x = playableRect.minX + spacecraft.size.width / 2
         spacecraft.position.y = playableRect.minY + playableRect.size.height / 2
+        
         spacecraft.zPosition = 50
         spacecraft.name = "spacecraft"
         spacecraft.constraints = [ SKConstraint.positionY(SKRange.init(lowerLimit: playableRect.minY, upperLimit: playableRect.maxY)) ]
-        destY = spacecraft.position.y
+        
+//        destY = spacecraft.position.y
         
         super.init(size: size)
     }
@@ -127,63 +156,74 @@ class GameScene: SKScene {
         run(SKAction.repeatForever(SKAction.sequence([SKAction.run {
             self.spawnStar()
         }, SKAction.wait(forDuration: 0.1)])))
-        
+
         run(SKAction.repeatForever(SKAction.sequence([SKAction.run {
             self.spawnAsteroid()
             }, SKAction.wait(forDuration: 4)])))
         
-        if motionManager.isAccelerometerAvailable == true {
-            print("AVAILIABALE!")
-            // 2
-            motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler:{
-                data, error in
+//        if motionManager.isAccelerometerAvailable == true {
+//            print("AVAILIABALE!")
+//            // 2
+//            motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler:{
+//                data, error in
+//
+//                let currentY = self.spacecraft.position.y
+//
+//                guard let d = data else {
+//                    return
+//                }
+//
+//                // 3
+////                print()
+////                print("x: \(d.acceleration.x)")
+////                print("y: \(d.acceleration.y)")
+////                print("z: \(d.acceleration.z)")
+//                let accVal = d.acceleration.x
+//                let coef: Double = 3000
+//                let border = 0.0
+//                self.destY = currentY - CGFloat((accVal - border) * coef)
+//            })
 
-                let currentY = self.spacecraft.position.y
-
-                guard let d = data else {
-                    return
-                }
-
-                // 3
-//                print()
-//                print("x: \(d.acceleration.x)")
-//                print("y: \(d.acceleration.y)")
-//                print("z: \(d.acceleration.z)")
-                let accVal = d.acceleration.x
-                let coef: Double = 3000
-                let border = 0.0
-                self.destY = currentY - CGFloat((accVal - border) * coef)
-            })
-
-        }
+//        }
     }
     
     override func sceneDidLoad() {
         
     }
     
-    
     // touching logics
-    func sceneTouched(touchLocation:CGPoint) {
-        destY = touchLocation.y
+    func spacecraftMoveRectTouched(touchLocation: CGPoint) {
+        spacecraft.setDestination(destination: touchLocation)
+    }
+    
+    func spacecraftShootRectTouched(touchLocation: CGPoint) {
+        spacecraft.shoot(to: touchLocation)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>,
                                with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
+        var touchLocations: [CGPoint] = []
+        
+        for touch in touches {
+            let touchLocation = touch.location(in: self)
+            touchLocations.append(touchLocation)
         }
-        let touchLocation = touch.location(in: self)
-        sceneTouched(touchLocation: touchLocation)
+        
+        touchLocations = touchLocations.sorted(by: { $0.x < $1.x })
+        
+        if touchLocations.count == 1 {
+            let location = touchLocations[0]
+            if spacecraftMoveRect.contains(location) {
+                spacecraftMoveRectTouched(touchLocation: location)
+            } else if spacecraftShootRect.contains(location) {
+                spacecraftShootRectTouched(touchLocation: location)
+            }
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>,
                                with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
-        }
-        let touchLocation = touch.location(in: self)
-        sceneTouched(touchLocation: touchLocation)
+        touchesBegan(touches, with: event)
     }
     
     func checkBordersSpacecraft() {
@@ -216,11 +256,11 @@ class GameScene: SKScene {
             if node.name == "spacecraft" || node.name == "vinetka" {
                 continue
             }
-            
+
             guard let node = node as? SKSpriteNode else {
                 return
             }
-            
+
             if node.position.x + node.size.width < self.playableRect.minX {
                 node.removeFromParent()
             }
@@ -231,11 +271,13 @@ class GameScene: SKScene {
            // node.zRotation += CGFloat.random(min: -0.1, max: 0.1)
         }
         
+        spacecraft.onFly(dt)
+        
 //        spacecraft.
-        spacecraft.run(SKAction.moveTo(y: destY, duration: 1))
+//        spacecraft.run(SKAction.moveTo(y: destY, duration: 1))
 
 //        spacecraft.position.y = destY
-        checkBordersSpacecraft()
+//        checkBordersSpacecraft()
 
     }
 }

@@ -10,77 +10,76 @@ import Foundation
 
 protocol IShipBuilder {
     var ship: Ship {get}
-    var mainWeaponFactory: WeaponFactory { get set }
-    var additionalWeaponFactory: WeaponFactory { get set }
-    
-    func buildMainWeapon(damage: Int, rechargeTime: Double)
-    func buildAdditionalWeapon(damage: Int, rechargeTime: Double)
-    func buildHp(maxHp: Int)
-    func buildArmor(armor: Int)
+
+    func buildMainWeapon()
+    func buildAdditionalWeapon()
+    func buildHp()
+    func buildSpeed()
+    func buildArmor()
 }
 
 class FastShipBuilder: IShipBuilder {
     
-    var ship: Ship {
-        return self.ship
+    var ship = Ship()
+    
+    func buildMainWeapon() {
+        let weaponFactory = MachineGunFactory()
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
     }
     
-    var mainWeaponFactory: WeaponFactory
-    var additionalWeaponFactory: WeaponFactory
-    
-    func buildMainWeapon(damage: Int, rechargeTime: Double) {
-        ship.mainWeapon = mainWeaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
+    func buildAdditionalWeapon() {
+        let weaponFactory = RocketFactory()
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.additional, damage: 100, rechargeTime: 50)
     }
     
-    func buildAdditionalWeapon(damage: Int, rechargeTime: Double) {
-        ship.mainWeapon = additionalWeaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
-    }
-    
-    func buildHp(maxHp: Int) {
+    func buildHp() {
         ship.maxHp = 100
         ship.currentHp = 100
     }
     
-    func buildArmor(armor: Int) {
+    func buildSpeed() {
+        ship.shipSpeedPerSec = 1000
+    }
+    
+    func buildArmor() {
         ship.armor = 100
     }
     
-    init(mainWeaponFactory: WeaponFactory, additionalWeaponFactory: WeaponFactory) {
-        self.mainWeaponFactory = mainWeaponFactory
-        self.additionalWeaponFactory = additionalWeaponFactory
+    init() {
+//        ship = Ship()
     }
     
 }
 
 class PowerfulShipBuilder: IShipBuilder {
     
-    var ship: Ship {
-        return self.ship
+    var ship = Ship()
+    
+    func buildMainWeapon() {
+        let weaponFactory = BlasterFactory()
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
     }
     
-    var mainWeaponFactory: WeaponFactory
-    var additionalWeaponFactory: WeaponFactory
-    
-    func buildMainWeapon(damage: Int, rechargeTime: Double) {
-        ship.mainWeapon = mainWeaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
+    func buildAdditionalWeapon() {
+        let weaponFactory = RocketFactory()
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.additional, damage: 10, rechargeTime: 10)
     }
     
-    func buildAdditionalWeapon(damage: Int, rechargeTime: Double) {
-        ship.mainWeapon = additionalWeaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
-    }
-    
-    func buildHp(maxHp: Int) {
+    func buildHp() {
         ship.maxHp = 300
         ship.currentHp = 300
     }
     
-    func buildArmor(armor: Int) {
+    func buildSpeed() {
+        ship.shipSpeedPerSec = 500
+    }
+    
+    func buildArmor() {
         ship.armor = 300
     }
     
-    init(mainWeaponFactory: WeaponFactory, additionalWeaponFactory: WeaponFactory) {
-        self.mainWeaponFactory = mainWeaponFactory
-        self.additionalWeaponFactory = additionalWeaponFactory
+    init() {
+        
     }
     
 }

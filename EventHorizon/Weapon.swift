@@ -49,3 +49,9 @@ class MachineGun: Weapon {
         super.init(weaponCategory, damage, rechargeTime)
     }
 }
+
+class Rocket: Weapon {
+    override init(_ weaponCategory: WeaponCategory, _ damage: Int, _ rechargeTime: Double) {
+        super.init(weaponCategory, damage, rechargeTime)
+    }
+}

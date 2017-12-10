@@ -31,3 +31,9 @@ class MachineGunFactory: WeaponFactory {
         return MachineGun(weaponCategory, damage, rechargeTime)
     }
 }
+
+class RocketFactory: WeaponFactory {
+    override func createWeapon(weaponCategory: WeaponCategory, damage: Int, rechargeTime: Double) -> Weapon {
+        return Rocket(weaponCategory, damage, rechargeTime)
+    }
+}
