@@ -273,11 +273,6 @@ class GameScene: SKScene {
         
         spacecraft.onFly(dt)
         
-//        spacecraft.
-//        spacecraft.run(SKAction.moveTo(y: destY, duration: 1))
-
-//        spacecraft.position.y = destY
-//        checkBordersSpacecraft()
 
     }
 }

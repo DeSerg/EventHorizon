@@ -49,9 +49,11 @@ class Ship: SKSpriteNode {
         let bullet = SKSpriteNode(imageNamed: "bullet")
         bullet.physicsBody = SKPhysicsBody(texture: bullet.texture!, size: bullet.size)
         bullet.physicsBody?.isDynamic = false
-        bullet.position = position
+        
+        bullet.position = CGPoint(x: position.x, y: position.y + size.height / 2)
         bullet.zPosition = zPosition - 10
         scene?.addChild(bullet)
+        
         bullet.run(SKAction.sequence([ SKAction.move(to: point, duration: 3), SKAction.run {bullet.removeFromParent()} ]))
     }
     
