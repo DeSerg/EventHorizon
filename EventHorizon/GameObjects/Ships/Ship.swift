@@ -46,15 +46,12 @@ class Ship: SKSpriteNode {
     }
     
     func shoot(to point: CGPoint) {
-        let bullet = SKSpriteNode(imageNamed: "bullet")
-        bullet.physicsBody = SKPhysicsBody(texture: bullet.texture!, size: bullet.size)
-        bullet.physicsBody?.isDynamic = false
+        let startPoint = CGPoint(x: position.x, y: position.y + size.height / 2)
+        var vectorPoint = CGPoint(x: point.x - startPoint.x, y: point.y - startPoint.y)
+        vectorPoint = vectorPoint.normalized() * (GameSize.height + GameSize.width)
         
-        bullet.position = CGPoint(x: position.x, y: position.y + size.height / 2)
-        bullet.zPosition = zPosition - 10
-        scene?.addChild(bullet)
+        mainWeapon?.shoot(from: startPoint, by: CGVector(dx: vectorPoint.x, dy: vectorPoint.y), at: scene!)
         
-        bullet.run(SKAction.sequence([ SKAction.move(to: point, duration: 3), SKAction.run {bullet.removeFromParent()} ]))
     }
     
     func onFly(_ dt: TimeInterval) {
@@ -70,11 +67,11 @@ class Ship: SKSpriteNode {
         let shipNeedsToMove = shipSpeedPerSec * CGFloat(dt)
         
         let shipCurrentPosition = position
-        let needToMoveDistance: CGFloat = min(shipNeedsToMove, abs(destination.y - shipCurrentPosition.y))
-        let needToMoveDirection: CGFloat = destination.y > self.position.y ? 1 : -1
+        let needToMoveDistance: CGFloat = min(shipNeedsToMove, abs(destination.x - shipCurrentPosition.x))
+        let needToMoveDirection: CGFloat = destination.x > self.position.x ? 1 : -1
         
         if needToMoveDistance != 0 {
-            self.position = CGPoint(x: position.x, y: position.y + needToMoveDistance * needToMoveDirection)
+            self.position = CGPoint(x: position.x + needToMoveDistance * needToMoveDirection, y: position.y)
 //            position.y += needToMoveDistance * needToMoveDirection
         }
         

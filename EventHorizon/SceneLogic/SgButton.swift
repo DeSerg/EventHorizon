@@ -40,13 +40,13 @@ class SgButton: SKSpriteNode {
                 assert(f != nil, "Error: Cannot create font \(fontName) / \(fontSize)")
                 font = f!
             } else {
-                font = UIFont.systemFontOfSize(fSz)
+                font = UIFont.systemFont(ofSize: fSz)
             }
             return font
         }
         
         func getImageWithColor(color: UIColor, size: CGSize, cornerRadius: CGFloat?) -> UIImage {
-            let rect = CGRectMake(0, 0, size.width, size.height)
+            let rect = CGRect(x: 0, y: 0, size.width, size.height)
             UIGraphicsBeginImageContextWithOptions(size, false, 0)
             color.setFill()
             
@@ -180,11 +180,11 @@ class SgButton: SKSpriteNode {
             let ctx = UIGraphicsGetCurrentContext();
             
             if image != nil {
-                image!.drawAtPoint(CGPointZero)
+                image!.draw(at: CGPointZero)
             } else {
-                let color = backgroundColor ?? UIColor.whiteColor()
+                let color = backgroundColor ?? UIColor.whiteColor
                 color.setFill()
-                CGContextFillRect(ctx, CGRectMake(0, 0, sz.width, sz.height));
+                ctx!.fill(CGRectMake(0, 0, sz.width, sz.height));
             }
             
             let rect = sz==stringSz! ?  CGRectMake(0, 0, sz.width, sz.height) : CGRectMake((sz.width - stringSz!.width) * 0.5, (sz.height - stringSz!.height) * 0.5, stringSz!.width, stringSz!.height)
@@ -196,7 +196,7 @@ class SgButton: SKSpriteNode {
             //Close the context
             UIGraphicsEndImageContext();
             
-            return SKTexture(image: image)
+            return SKTexture(image: image!)
         }
     }
     
@@ -214,7 +214,7 @@ class SgButton: SKSpriteNode {
     /*
     * Function to be called after being tapped
     */
-    var buttonFunc: ((button: SgButton) -> Void)?
+    var buttonFunc: ((_ button: SgButton) -> Void)?
     
     /*
     * Internal data, should not be accessed from outside

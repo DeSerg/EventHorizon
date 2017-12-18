@@ -13,7 +13,9 @@ import CoreGraphics
 class MainMenuScene: SKScene {
     
     let buttonSize: CGSize
-    var button: SKNode!
+    var buttonStart: SKNode!
+    var buttonShop: SKNode!
+    var buttonAbout: SKNode!
     
     override init(size: CGSize) {
         
@@ -28,19 +30,38 @@ class MainMenuScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
-        createButton()
+        
+        createButtons()
         
     }
     
-    func createButton()
+    func createButtons()
     {
-        // Create a simple red rectangle that's 100x44
-        button = SKSpriteNode(imageNamed: "button")
-        // Put it in the center of the scene
-        button.position = CGPoint(x:self.frame.midX, y:self.frame.midY);
+        buttonStart = SKSpriteNode(imageNamed: "button_start")
+        buttonStart.position = CGPoint(x: self.frame.midX, y: self.frame.midY);
         
+        print(buttonSize)
         
-        self.addChild(button)
+        buttonShop = SKSpriteNode(imageNamed: "button_shop")
+        buttonShop.position = CGPoint(x: self.frame.midX, y: self.frame.midY - buttonStart.frame.height);
+        
+        buttonAbout = SKSpriteNode(imageNamed: "button_about")
+        buttonAbout.position = CGPoint(x: self.frame.midX, y: self.frame.midY - 2 * buttonStart.frame.height);
+        
+        self.addChild(buttonStart)
+        self.addChild(buttonShop)
+        self.addChild(buttonAbout)
+    }
+    
+    func onStartClicked() {
+        view!.presentScene(SceneManager.instance.game)
+    }
+    
+    func onShopClicked() {
+        view!.presentScene(SceneManager.instance.workshop)
+    }
+    
+    func onAboutClicked() {
         
     }
     
@@ -48,9 +69,13 @@ class MainMenuScene: SKScene {
         let touch = touches.first
         let touchLocation = touch!.location(in: self)
         // Check if the location of the touch is within the button's bounds
-        if button.contains(touchLocation) {
-            print("tapped!")
+        if buttonStart.contains(touchLocation) {
+            onStartClicked()
+        } else if buttonShop.contains(touchLocation) {
+            onShopClicked()
+        } else if buttonAbout.contains(touchLocation) {
+            onAboutClicked()
         }
-        
     }
+    
 }

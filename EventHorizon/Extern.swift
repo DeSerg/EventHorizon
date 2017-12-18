@@ -10,7 +10,8 @@ import Foundation
 import SpriteKit
 
 
-let GameSize = CGSize(width: 2048, height: 1536)
+let GameSize = CGSize(width: 1280, height: 2272)
+let PlayableRect = CGRect(x: 0, y: 0, width: GameSize.width, height: GameSize.height)
 
 let PercentageButtonWidth = 0.2
 let PercentageButtonHeight = 0.75

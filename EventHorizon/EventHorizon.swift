@@ -10,7 +10,8 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-class EventHorizon {
+
+class EventHorizonHelper {
     
     private let DefaultDistanceCoeff = CGFloat(4)
     private let screenRect: CGRect
@@ -33,8 +34,8 @@ class EventHorizon {
             self.distanceCoeff = DefaultDistanceCoeff
         }
         
-        let width = screenRect.width
-        let halfWidth = width / 2
+        let height = screenRect.height
+//        let halfWidth = width / 2
         
 //        distortionFunct = { (x) in
 //            if x <= screenRect.width / 2 {
@@ -97,43 +98,43 @@ class EventHorizon {
 //        }
 
         distortionNormFunct = { (x) in
-            return 1 - cos(asin(0.95 * x / width))
+            return 1 - cos(asin(0.95 * x / height))
         }
 
-        let widthSquare = width * width
+        let heightSquare = height * height
         
         distortionNormDerivative = { (x) in
-            let temp = sqrt(1 - 0.9025 * x * x / (widthSquare))
-            return 0.9025 * x / (widthSquare * temp)
+            let temp = sqrt(1 - 0.9025 * x * x / (heightSquare))
+            return 0.9025 * x / (heightSquare * temp)
         }
 
         distortionFunct = { (x) in
-            return self.distortionNormFunct(x) * distanceCoeff * width
+            return self.distortionNormFunct(x) * distanceCoeff * height
         }
         
         distortionDerivative = { (x) in
-            return self.distortionNormDerivative(x) * distanceCoeff * width
+            return self.distortionNormDerivative(x) * distanceCoeff * height
         }
     }
     
-    func scaleFor(xCoord: CGFloat) -> CGFloat {
-        let dist = distortionNormFunct(xCoord)
+    func scaleFor(yCoord: CGFloat) -> CGFloat {
+        let dist = distortionNormFunct(yCoord)
         let coef = (scaleCoeff - 1) / scaleCoeff
         return max(1 / scaleCoeff, 1 - dist * coef)
     }
     
-    func xScaleFor(xCoord: CGFloat) -> CGFloat {
-        let scale = scaleFor(xCoord: xCoord)
+    func yScaleFor(xCoord: CGFloat) -> CGFloat {
+        let scale = scaleFor(yCoord: xCoord)
         let derivative = distortionNormDerivative(xCoord)
         let coeff = 1 / sqrt(pow(derivative , 2) + 1)
         return scale * coeff
     }
     
-    func nextXCoordFor(xCoord: CGFloat, speed: CGFloat, dt: TimeInterval) -> CGFloat {
-        let derivative = Float(distortionDerivative(xCoord))
-        let vx = max(minSpeed, speed * CGFloat( cos(atan(pow(derivative, 4))) ))
-        let nextXCoord = xCoord - vx * CGFloat(dt)
-        return nextXCoord
+    func nextYCoordFor(yCoord: CGFloat, speed: CGFloat, dt: TimeInterval) -> CGFloat {
+        let derivative = Float(distortionDerivative(yCoord))
+        let vy = max(minSpeed, speed * CGFloat( cos(atan(pow(derivative, 4))) ))
+        let nextYCoord = yCoord - vy * CGFloat(dt)
+        return nextYCoord
     }
     
     func randomPoint() -> CGPoint {
@@ -141,5 +142,95 @@ class EventHorizon {
         let y = CGFloat.random(min: screenRect.minY, max: screenRect.maxY)
         return CGPoint(x: x, y: y)
     }
+
+    
+}
+
+class EventHorizonSetupHelper {
+    var playableRect: CGRect?
+    var speed: CGFloat?
+    var distanceCoeff: CGFloat?
+    var scaleCoeff: CGFloat?
+}
+
+class EventHorizon {
+    
+    static let instance = EventHorizon()
+    private static let setup = EventHorizonSetupHelper()
+    
+    let helper: EventHorizonHelper!
+    let playableRect: CGRect!
+    let speed: CGFloat!
+    
+    var spaceObjects: [SKSpriteNode] = []
+    
+//    var timer: Timer?
+//    var interval: TimeInterval = 0.01 /*in seconds*/
+    
+    class func setup(playableRect: CGRect, speed: CGFloat, distanceCoeff: CGFloat, scaleCoeff: CGFloat) {
+        EventHorizon.setup.playableRect = playableRect
+        EventHorizon.setup.speed = speed
+        EventHorizon.setup.distanceCoeff = distanceCoeff
+        EventHorizon.setup.scaleCoeff = scaleCoeff
+    }
+    
+    private init() {
+        let setupPlayableRect = EventHorizon.setup.playableRect
+        let setupSpeed = EventHorizon.setup.speed
+        let setupDistanceCoeff = EventHorizon.setup.distanceCoeff
+        let setupScaleCoeff = EventHorizon.setup.scaleCoeff
+        guard setupPlayableRect != nil &&
+                setupSpeed != nil &&
+                setupDistanceCoeff != nil &&
+                setupScaleCoeff != nil else {
+            fatalError("EventHorizon: init: setup has not been called")
+        }
+        
+        helper = EventHorizonHelper(screenRect: setupPlayableRect!,
+                                                distanceCoeff: setupDistanceCoeff!,
+                                                scaleCoeff: setupScaleCoeff!)
+        speed = setupSpeed!
+        playableRect = setupPlayableRect
+    }
+    
+//    func start() {
+//        timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(update), userInfo: nil, repeats: true)
+//    }
+//
+//    func stop() {
+//        if(timer != nil) {
+//            timer!.invalidate()
+//        }
+//    }
+    
+    func update(dt: TimeInterval) {
+        for (index, spaceObject) in spaceObjects.enumerated().reversed() {
+            if !spaceObject.frame.intersects(playableRect) && spaceObject.position.y < playableRect.height {
+                spaceObject.removeFromParent()
+                spaceObjects.remove(at: index)
+            }
+            
+            spaceObject.position.y = helper.nextYCoordFor(yCoord: spaceObject.position.y, speed: speed, dt: dt)
+            let scale = helper.scaleFor(yCoord: spaceObject.position.y)
+            spaceObject.xScale = scale// * self.eventHorizon.xScaleFor(xCoord: node.position.x)
+            spaceObject.yScale = scale
+            
+        }
+    }
+    
+    func addObject(_ object: SKSpriteNode) {
+        spaceObjects.append(object)
+    }
+    
+    func removeObject(object: SKSpriteNode) {
+        for (index, spaceObject) in spaceObjects.enumerated() {
+            if spaceObject == object {
+                spaceObjects.remove(at: index)
+                return
+            }
+        }
+    }
+    
+    
     
 }

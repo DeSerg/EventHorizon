@@ -24,12 +24,12 @@ class FastShipBuilder: IShipBuilder {
     
     func buildMainWeapon() {
         let weaponFactory = MachineGunFactory()
-        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 0.1)
     }
     
     func buildAdditionalWeapon() {
         let weaponFactory = RocketFactory()
-        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.additional, damage: 100, rechargeTime: 50)
+        ship.additionalWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.additional, damage: 100, rechargeTime: 4)
     }
     
     func buildHp() {
@@ -57,12 +57,12 @@ class PowerfulShipBuilder: IShipBuilder {
     
     func buildMainWeapon() {
         let weaponFactory = BlasterFactory()
-        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 10)
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.main, damage: 10, rechargeTime: 0.5)
     }
     
     func buildAdditionalWeapon() {
         let weaponFactory = RocketFactory()
-        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.additional, damage: 10, rechargeTime: 10)
+        ship.mainWeapon = weaponFactory.createWeapon(weaponCategory: WeaponCategory.additional, damage: 10, rechargeTime: 5)
     }
     
     func buildHp() {

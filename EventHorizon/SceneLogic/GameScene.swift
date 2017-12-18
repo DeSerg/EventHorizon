@@ -12,17 +12,16 @@ import CoreMotion
 
 class GameScene: SKScene {
     
+    // constants
     let shipSpeed: CGFloat = 500
     let starSize: CGFloat = 20
     let asteroidSize: CGFloat = 350
     
-    
     var lastUpdateTime: TimeInterval = 0
     var dt: TimeInterval = 0
     
-    
     var playableRect: CGRect
-    var eventHorizon: EventHorizon
+//    var eventHorizon: EventHorizonHelper
     
     let SpacecraftMoveRectPercentage: CGFloat = 0.2
     let SpacecraftShootRectPercentage: CGFloat = 0.75
@@ -33,29 +32,19 @@ class GameScene: SKScene {
     var topMenuRect: CGRect
     
     
-    var spacecraft: Ship
-    
+    // helping classes
     var motionManager = CMMotionManager()
     
     
+    // game data
+    var spacecraft: Ship
+    
+    var stars: Array<Star> = []
+    var enemies: Array<SKSpriteNode> = []
+    
+    
     func spawnStar(coef: CGFloat = 1, inOrigin: Bool = true) {
-        
-        let star = SKSpriteNode(imageNamed: "star")
-        star.name = "star"
-        star.size = CGSize(width: starSize * coef, height: starSize * coef)
-        star.zRotation = CGFloat.random(min: 0, max: CGFloat(Double.pi))
-        star.zPosition = 40
-        if inOrigin {
-            star.position.x = playableRect.width + star.size.width / 2
-            let starMinY = playableRect.minY - star.size.height / 2
-            let starMaxY = playableRect.maxY + star.size.height / 2
-            star.position.y = CGFloat.random(min: starMinY, max: starMaxY)
-        } else {
-            star.position = eventHorizon.randomPoint()
-        }
-        let starScale = eventHorizon.scaleFor(xCoord: star.position.x)
-        star.setScale(starScale)
-        addChild(star)
+        stars.append(Star(imagedNamed: "star", parent: self, coef: coef, inOrigin: inOrigin))
     }
     
     func spawnAsteroid(coef: CGFloat = 1, inOrigin: Bool = true) {
@@ -66,17 +55,19 @@ class GameScene: SKScene {
         asteroid.zRotation = CGFloat.random(min: 0, max: CGFloat(Double.pi))
         asteroid.zPosition = 45
         if inOrigin {
-            asteroid.position.x = playableRect.width + asteroid.size.width / 2
-            let asteroidMinY = playableRect.minY - asteroid.size.height / 2
-            let asteroidMaxY = playableRect.maxY + asteroid.size.height / 2
-            asteroid.position.y = CGFloat.random(min: asteroidMinY, max: asteroidMaxY)
+            asteroid.position.y = playableRect.height + asteroid.size.height / 2
+            let asteroidMinX = playableRect.minX - asteroid.size.width / 2
+            let asteroidMaxX = playableRect.maxX + asteroid.size.width / 2
+            asteroid.position.x = CGFloat.random(min: asteroidMinX, max: asteroidMaxX)
         } else {
-            asteroid.position = eventHorizon.randomPoint()
+            asteroid.position = EventHorizon.instance.helper.randomPoint()
         }
-        let asteroidScale = eventHorizon.scaleFor(xCoord: asteroid.position.x)
+        let asteroidScale = EventHorizon.instance.helper.scaleFor(yCoord: asteroid.position.y)
         asteroid.setScale(asteroidScale)
         asteroid.run(SKAction.repeatForever( SKAction.rotate(byAngle: CGFloat.random(min: -0.1, max: 0.1), duration: 0.1) ))
+        
         addChild(asteroid)
+        EventHorizon.instance.addObject(asteroid)
     }
     
     func updateDt(_ currentTime: TimeInterval) {
@@ -89,41 +80,47 @@ class GameScene: SKScene {
     }
     
     override init(size: CGSize) {
-        let maxAspectRatio:CGFloat = 16.0/9.0 // 1
-        let playableHeight = size.width / maxAspectRatio // 2
-        let playableMargin = (size.height-playableHeight)/2.0 // 3
+        
+//        let maxAspectRatio:CGFloat = 16.0/9.0 // 1
+        let playableWidth = size.width// size.height / maxAspectRatio // 2
+        let playableMargin = CGFloat(0) //(size.width-playableWidth)/2.0 // 3
+        
+//        let maxAspectRatio:CGFloat = 16.0/9.0 // 1
+//        let playableHeight = size.width / maxAspectRatio // 2
+//        let playableMargin = (size.height-playableHeight)/2.0 // 3
+//
         playableRect = CGRect(x: 0, y: playableMargin,
-                              width: size.width,
-                              height: playableHeight)
+                              width: playableWidth,
+                              height: size.height)
+        
+        EventHorizon.setup(playableRect: playableRect, speed: shipSpeed, distanceCoeff: 1, scaleCoeff: 50)
         
         spacecraftMoveRect = CGRect(x: 0, y: playableMargin,
-                                    width: size.width * SpacecraftMoveRectPercentage,
-                                    height: playableHeight)
+                                    width: playableWidth,
+                                    height: size.height * SpacecraftMoveRectPercentage)
         
-        spacecraftShootRect = CGRect(x: spacecraftMoveRect.width, y: playableMargin,
-                                    width: size.width * SpacecraftShootRectPercentage,
-                                    height: playableHeight)
+        spacecraftShootRect = CGRect(x: playableMargin, y: spacecraftMoveRect.height,
+                                    width: playableWidth,
+                                    height: size.height * SpacecraftShootRectPercentage)
         
-        topMenuRect = CGRect(x: spacecraftMoveRect.width + spacecraftShootRect.width, y: playableMargin,
-                                     width: size.width * TopMenuRectPercentage,
-                                     height: playableHeight)
+        topMenuRect = CGRect(x: playableMargin, y: spacecraftMoveRect.height + spacecraftShootRect.height,
+                                     width: playableWidth,
+                                     height: size.height * TopMenuRectPercentage)
         
+//        print(playableRect.origin)
+//        print(playableRect.size)
         
-        
-        print(playableRect.origin)
-        print(playableRect.size)
-        
-        eventHorizon = EventHorizon(screenRect: playableRect, distanceCoeff: 1, scaleCoeff: 50)
+//        eventHorizon = EventHorizonHelper(screenRect: playableRect, distanceCoeff: 1, scaleCoeff: 50)
         
         let shipDirector = ShipDirector()
         spacecraft = shipDirector.construct(builder: FastShipBuilder())
 
-        spacecraft.position.x = playableRect.minX + spacecraft.size.width / 2
-        spacecraft.position.y = playableRect.minY + playableRect.size.height / 2
+        spacecraft.position.x = playableRect.minX + playableRect.size.width / 2
+        spacecraft.position.y = playableRect.minY + spacecraft.size.height / 2
         
         spacecraft.zPosition = 50
         spacecraft.name = "spacecraft"
-        spacecraft.constraints = [ SKConstraint.positionY(SKRange.init(lowerLimit: playableRect.minY, upperLimit: playableRect.maxY)) ]
+        spacecraft.constraints = [ SKConstraint.positionY(SKRange.init(lowerLimit: playableRect.minX, upperLimit: playableRect.maxX)) ]
         
 //        destY = spacecraft.position.y
         
@@ -209,7 +206,7 @@ class GameScene: SKScene {
             touchLocations.append(touchLocation)
         }
         
-        touchLocations = touchLocations.sorted(by: { $0.x < $1.x })
+        touchLocations = touchLocations.sorted(by: { $0.y < $1.y })
         
         if touchLocations.count == 1 {
             let location = touchLocations[0]
@@ -252,24 +249,25 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         updateDt(currentTime)
         
-        for node in children {
-            if node.name == "spacecraft" || node.name == "vinetka" {
-                continue
-            }
-
-            guard let node = node as? SKSpriteNode else {
-                return
-            }
-
-            if node.position.x + node.size.width < self.playableRect.minX {
-                node.removeFromParent()
-            }
-            node.position.x = self.eventHorizon.nextXCoordFor(xCoord: node.position.x, speed: self.shipSpeed, dt: self.dt)
-            let scale = self.eventHorizon.scaleFor(xCoord: node.position.x)
-            node.xScale = scale// * self.eventHorizon.xScaleFor(xCoord: node.position.x)
-            node.yScale = scale
-           // node.zRotation += CGFloat.random(min: -0.1, max: 0.1)
-        }
+        EventHorizon.instance.update(dt: dt)
+//        for node in children {
+//            if node.name == "spacecraft" || node.name == "vinetka" {
+//                continue
+//            }
+//
+//            guard let node = node as? SKSpriteNode else {
+//                return
+//            }
+//
+//            if node.position.y + node.size.height < self.playableRect.minY {
+//                node.removeFromParent()
+//            }
+//            node.position.y = self.eventHorizon.nextYCoordFor(yCoord: node.position.y, speed: self.shipSpeed, dt: self.dt)
+//            let scale = self.eventHorizon.scaleFor(yCoord: node.position.y)
+//            node.xScale = scale// * self.eventHorizon.xScaleFor(xCoord: node.position.x)
+//            node.yScale = scale
+//           // node.zRotation += CGFloat.random(min: -0.1, max: 0.1)
+//        }
         
         spacecraft.onFly(dt)
         

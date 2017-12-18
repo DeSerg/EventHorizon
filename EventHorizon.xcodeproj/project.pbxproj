@@ -22,7 +22,7 @@
 		D4BE7CD51FE7FCFC00552F60 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D4BE7CCE1FE7FCFC00552F60 /* Info.plist */; };
 		D4BE7CD61FE7FCFC00552F60 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE7CD01FE7FCFC00552F60 /* MainMenuScene.swift */; };
 		D4BE7CD71FE7FCFD00552F60 /* WorkshopScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE7CD11FE7FCFC00552F60 /* WorkshopScene.swift */; };
-		D4BE7CD81FE7FCFD00552F60 /* SceneLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE7CD21FE7FCFC00552F60 /* SceneLogic.swift */; };
+		D4BE7CD81FE7FCFD00552F60 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE7CD21FE7FCFC00552F60 /* SceneManager.swift */; };
 		D4BE7CD91FE7FCFD00552F60 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE7CD31FE7FCFC00552F60 /* GameScene.swift */; };
 		D4FCADE61F863A0300526B33 /* EventHorizon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FCADE51F863A0300526B33 /* EventHorizon.swift */; };
 		D4FCADE81F864C2700526B33 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FCADE71F864C2700526B33 /* MyUtils.swift */; };
@@ -39,12 +39,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D4579B2C1F6EE35D009357C8 /* EventHorizon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = EventHorizon.app; path = "/Users/deserg/Documents/Programming/ios/EventHorizon/build/Debug-iphoneos/EventHorizon.app"; sourceTree = "<absolute>"; };
 		D4579B2F1F6EE35D009357C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4579B371F6EE35D009357C8 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		D4579B3A1F6EE35D009357C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D4579B3F1F6EE35D009357C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D4579B461F6EE35D009357C8 /* EventHorizonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = EventHorizonTests.xctest; path = "/Users/deserg/Documents/Programming/ios/EventHorizon/build/Debug-iphoneos/EventHorizonTests.xctest"; sourceTree = "<absolute>"; };
+		D4BAA76F1FE851B900705745 /* EventHorizon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventHorizon.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4BAA7701FE851B900705745 /* EventHorizonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = EventHorizonTests.xctest; path = "/Users/deserg/Documents/Programming/ios/EventHorizon/build/Debug-iphoneos/EventHorizonTests.xctest"; sourceTree = "<absolute>"; };
 		D4BE7CBA1FE7F8A800552F60 /* Extern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extern.swift; sourceTree = "<group>"; };
 		D4BE7CBE1FE7FC5600552F60 /* ShipBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShipBuilder.swift; sourceTree = "<group>"; };
 		D4BE7CBF1FE7FC5600552F60 /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
@@ -56,7 +56,7 @@
 		D4BE7CCE1FE7FCFC00552F60 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4BE7CD01FE7FCFC00552F60 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		D4BE7CD11FE7FCFC00552F60 /* WorkshopScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkshopScene.swift; sourceTree = "<group>"; };
-		D4BE7CD21FE7FCFC00552F60 /* SceneLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLogic.swift; sourceTree = "<group>"; };
+		D4BE7CD21FE7FCFC00552F60 /* SceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
 		D4BE7CD31FE7FCFC00552F60 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D4FCADE51F863A0300526B33 /* EventHorizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHorizon.swift; sourceTree = "<group>"; };
 		D4FCADE71F864C2700526B33 /* MyUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
@@ -84,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				D4579B2E1F6EE35D009357C8 /* EventHorizon */,
+				D4BAA76F1FE851B900705745 /* EventHorizon.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -117,8 +118,8 @@
 		D4BE7CBD1FE7FC5600552F60 /* Ships */ = {
 			isa = PBXGroup;
 			children = (
-				D4BE7CBE1FE7FC5600552F60 /* ShipBuilder.swift */,
 				D4BE7CBF1FE7FC5600552F60 /* Ship.swift */,
+				D4BE7CBE1FE7FC5600552F60 /* ShipBuilder.swift */,
 				D4BE7CC01FE7FC5600552F60 /* ShipDirector.swift */,
 			);
 			path = Ships;
@@ -146,9 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				D4BE7CD01FE7FCFC00552F60 /* MainMenuScene.swift */,
-				D4BE7CD11FE7FCFC00552F60 /* WorkshopScene.swift */,
-				D4BE7CD21FE7FCFC00552F60 /* SceneLogic.swift */,
 				D4BE7CD31FE7FCFC00552F60 /* GameScene.swift */,
+				D4BE7CD11FE7FCFC00552F60 /* WorkshopScene.swift */,
+				D4BE7CD21FE7FCFC00552F60 /* SceneManager.swift */,
 			);
 			path = SceneLogic;
 			sourceTree = "<group>";
@@ -170,7 +171,7 @@
 			);
 			name = EventHorizon;
 			productName = EventHorizon;
-			productReference = D4579B2C1F6EE35D009357C8 /* EventHorizon.app */;
+			productReference = D4BAA76F1FE851B900705745 /* EventHorizon.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D4579B451F6EE35D009357C8 /* EventHorizonTests */ = {
@@ -188,7 +189,7 @@
 			);
 			name = EventHorizonTests;
 			productName = EventHorizonTests;
-			productReference = D4579B461F6EE35D009357C8 /* EventHorizonTests.xctest */;
+			productReference = D4BAA7701FE851B900705745 /* EventHorizonTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -273,7 +274,7 @@
 				D4BE7CBB1FE7F8A800552F60 /* Extern.swift in Sources */,
 				D4FCADE81F864C2700526B33 /* MyUtils.swift in Sources */,
 				D4BE7CC91FE7FC5600552F60 /* WeaponFactory.swift in Sources */,
-				D4BE7CD81FE7FCFD00552F60 /* SceneLogic.swift in Sources */,
+				D4BE7CD81FE7FCFD00552F60 /* SceneManager.swift in Sources */,
 				D4BE7CC71FE7FC5600552F60 /* ShipDirector.swift in Sources */,
 				D4579B301F6EE35D009357C8 /* AppDelegate.swift in Sources */,
 			);
